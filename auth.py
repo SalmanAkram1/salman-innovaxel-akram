@@ -1,9 +1,12 @@
 # auth.py
-def is_admin(user):
-    return user.role == 'admin'
+from flask import Blueprint, request, jsonify
+from werkzeug.security import generate_password_hash
 
-@auth.route('/admin', methods=['GET'])
-def admin_route():
-    if not is_admin(current_user):
-        return jsonify({'message': 'Access denied'}), 403
-    return jsonify({'message': 'Welcome Admin'}), 200
+auth = Blueprint('auth', __name__)
+
+@auth.route('/signup', methods=['POST'])
+def signup():
+    data = request.get_json()
+    hashed_password = generate_password_hash(data['password'], method='sha256')
+    # Save user to database (simulated)
+    return jsonify({'message': 'User created successfully'}), 201
